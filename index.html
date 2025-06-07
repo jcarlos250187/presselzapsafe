@@ -44,17 +44,37 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1262200501916088'); // 
+    fbq('init', '1262200501916088');
     fbq('track', 'PageView');
   </script>
-  <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1262200501916088&ev=PageView&noscript=1"/></noscript>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+         src="https://www.facebook.com/tr?id=1262200501916088&ev=PageView&noscript=1"/>
+  </noscript>
   <!-- End Facebook Pixel Code -->
 
   <script>
-    setTimeout(function() {
-      window.location.href = 'https://wa.me/558699836246?text=Oi%20tudo%20bem%3F';
-    }, 3000); // Redireciona após 3 segundos
+    async function redirecionarComWebhook() {
+      try {
+        const resposta = await fetch("https://fluxo.cfdojon.work/webhook/jcarloszs");
+        const dados = await resposta.json();
+
+        if (dados && Array.isArray(dados.numbers) && dados.numbers.length > 0) {
+          const numeroAleatorio = dados.numbers[Math.floor(Math.random() * dados.numbers.length)];
+          window.location.href = `https://wa.me/${numeroAleatorio}?text=Oi%20tudo%20bem%3F`;
+        } else {
+          throw new Error("Lista de números inválida");
+        }
+      } catch (erro) {
+        console.error("Erro ao buscar números:", erro);
+        // Redireciona para número padrão em caso de erro
+        window.location.href = 'https://wa.me/558699836246?text=Oi%20tudo%20bem%3F';
+      }
+    }
+
+    window.onload = function() {
+      setTimeout(redirecionarComWebhook, 1000); // Espera 1 segundo antes de buscar e redirecionar
+    };
   </script>
 </head>
 <body>
